@@ -1,0 +1,20 @@
+﻿@model WebInterface.Models.CreateReportViewModel
+
+@{
+    ViewData["Title"] = "Create Report";
+}
+
+<h1 class="mt-4">Create Report</h1>
+
+<form asp-action="CreateReport" method="post" class="mt-4">
+    <div class="form-group">
+        <label asp-for="MeterSerialNumber" class="control-label"></label>
+        <input asp-for="MeterSerialNumber" class="form-control" />
+        <span asp-validation-for="MeterSerialNumber" class="text-danger"></span>
+    </div>
+    <button type="submit" style="margin-top:10px" class="btn btn-primary">Submit</button>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

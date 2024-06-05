@@ -1,0 +1,59 @@
+﻿@model IEnumerable<WebInterface.Models.Report>
+
+@{
+    ViewData["Title"] = "Reports";
+    var pageNumber = ViewBag.PageNumber ?? 1;
+    var pageSize = ViewBag.PageSize ?? 10;
+    var totalPages = ViewBag.TotalPages ?? 0;
+    var reportServiceUrl = ViewBag.ReportServiceUrl;
+}
+
+<h1 class="mt-4">Reports</h1>
+
+@if (Model != null && Model.Any())
+{
+    <table class="table table-striped">
+        <thead class="thead-light">
+            <tr>
+                <th>Request Date</th>
+                <th>Status</th>
+                <th>Meter Serial Number</th>
+                <th>Content</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.RequestDate</td>
+                    <td>@item.Status</td>
+                    <td>@item.MeterSerialNumber</td>
+                    <td>
+                        @if (!string.IsNullOrEmpty(item.Url))
+                        {
+                        <a href="@($"{reportServiceUrl}{item.Url}")" class="btn btn-primary" target="_blank">Download</a>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+            <li class="page-item @(pageNumber <= 1 ? "disabled" : "")">
+                <a class="page-link" asp-action="Reports" asp-route-pageNumber="@(pageNumber - 1)" asp-route-pageSize="@(pageSize)">Previous</a>
+            </li>
+            <li class="page-item disabled">
+                <span class="page-link">Page @pageNumber of @totalPages</span>
+            </li>
+            <li class="page-item @(pageNumber >= totalPages ? "disabled" : "")">
+                <a class="page-link" asp-action="Reports" asp-route-pageNumber="@(pageNumber + 1)" asp-route-pageSize="@(pageSize)">Next</a>
+            </li>
+        </ul>
+    </nav>
+}
+else
+{
+    <p>No reports available.</p>
+}

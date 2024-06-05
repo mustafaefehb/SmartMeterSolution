@@ -1,0 +1,69 @@
+﻿@model IEnumerable<WebInterface.Models.MeterData>
+
+@{
+    ViewData["Title"] = "Meter Data";
+    var pageNumber = ViewBag.PageNumber ?? 1;
+    var pageSize = ViewBag.PageSize ?? 10;
+    var totalPages = ViewBag.TotalPages ?? 0;
+    var meterSerialNumber = ViewBag.MeterSerialNumber ?? string.Empty;
+}
+
+<h1 class="mt-4">Meter Data</h1>
+
+<form method="get" class="form-inline mb-3">
+    <div class="form-group mr-2">
+        <div class="row">
+            <div class="col-11">
+                <input type="text" name="meterSerialNumber" class="form-control" id="meterSerialNumber" placeholder="Meter Serial Number" value="@meterSerialNumber" />
+            </div>
+            <div class="col-1">
+                <button type="submit" class="btn btn-primary">Filter</button>
+            </div>
+        </div>       
+    </div>    
+</form>
+
+@if (Model != null && Model.Any())
+{
+    <table class="table table-striped">
+        <thead class="thead-light">
+            <tr>
+                <th>Serial Number</th>
+                <th>Measurement Time</th>
+                <th>Last Index</th>
+                <th>Voltage</th>
+                <th>Current</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.MeterSerialNumber</td>
+                    <td>@item.MeasurementTime</td>
+                    <td>@item.LastIndex</td>
+                    <td>@item.Voltage</td>
+                    <td>@item.Current</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+            <li class="page-item @(pageNumber <= 1 ? "disabled" : "")">
+                <a class="page-link" asp-action="Index" asp-route-pageNumber="@(pageNumber - 1)" asp-route-pageSize="@(pageSize)" asp-route-meterSerialNumber="@meterSerialNumber">Previous</a>
+            </li>
+            <li class="page-item disabled">
+                <span class="page-link">Page @pageNumber of @totalPages</span>
+            </li>
+            <li class="page-item @(pageNumber >= totalPages ? "disabled" : "")">
+                <a class="page-link" asp-action="Index" asp-route-pageNumber="@(pageNumber + 1)" asp-route-pageSize="@(pageSize)" asp-route-meterSerialNumber="@meterSerialNumber">Next</a>
+            </li>
+        </ul>
+    </nav>
+}
+else
+{
+    <p>No meter data available.</p>
+}
